@@ -297,33 +297,33 @@ export class News extends Component {
     let parsedData = await data.json();
     this.setState({ articles: parsedData.articles });
   }
-  async handleOnNext() {
-    console.log("After clicking on the HandleonNext");
+  // async handleOnNext() {
+  //   console.log("After clicking on the HandleonNext");
 
-    let url =
-      "https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=6d6abdf2aa094b79a25fc3a1f417d624&page=2";
-    let data = await fetch(url);
-    let parsedData = await data.json();
+  //   let url =
+  //     " https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=6d6abdf2aa094b79a25fc3a1f417d624&page=2";
+  //   let data = await fetch(url);
+  //   let parsedData = await data.json();
 
-    this.setState({
-      page: this.state.page + 1,
-      articles: parsedData.articles,
-    });
-  }
-  async handleOnPrevious() {
-    console.log("After clicking ont the handleOnprevious");
-    console.log("After clicking on the HandleonNext");
+  //   this.setState({
+  //     page: this.state.page + 1,
+  //     articles: parsedData.articles,
+  //   });
+  // }
+  // async handleOnPrevious() {
+  //   console.log("After clicking ont the handleOnprevious");
+  //   console.log("After clicking on the HandleonNext");
 
-    let url = `https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=6d6abdf2aa094b79a25fc3a1f417d624&page=${
-      this.state.page - 1
-    }`;
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    this.setState({
-      page: this.state.page - 1,
-      articles: parsedData.articles,
-    });
-  }
+  //   let url = `https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=6d6abdf2aa094b79a25fc3a1f417d624&page=${
+  //     this.state.page - 1
+  //   }`;
+  //   let data = await fetch(url);
+  //   let parsedData = await data.json();
+  //   this.setState({
+  //     page: this.state.page - 1,
+  //     articles: parsedData.articles,
+  //   });
+  // }
   render() {
     return (
       <>
