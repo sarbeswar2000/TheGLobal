@@ -287,48 +287,54 @@ export class News extends Component {
       articles: this.articles,
       loading: false,
       page: 1,
+      totalResults: 0,
     };
   }
   async componentDidMount() {
     console.log("cdm");
     let url =
-      "https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=6d6abdf2aa094b79a25fc3a1f417d624";
+      " https://newsapi.org/v2/top-headlines?country=in&category=business&pageSize=18&apiKey=6d6abdf2aa094b79a25fc3a1f417d624";
     let data = await fetch(url);
     let parsedData = await data.json();
-    this.setState({ articles: parsedData.articles });
+    this.setState({
+      articles: parsedData.articles,
+      totalResults: parsedData.totalResults,
+    });
   }
-  // async handleOnNext() {
-  //   console.log("After clicking on the HandleonNext");
+  handleOnNext = async () => {
+    if (this.state.page + 1 > Math.ceil(this.state.totalResults / 18)) {
+    } else {
+      let url = `https://newsapi.org/v2/top-headlines?country=in&category=business&page=${
+        this.state.page + 1
+      }&apiKey=6d6abdf2aa094b79a25fc3a1f417d624&pageSize=18`;
+      let data = await fetch(url);
+      let parsedData = await data.json();
 
-  //   let url =
-  //     " https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=6d6abdf2aa094b79a25fc3a1f417d624&page=2";
-  //   let data = await fetch(url);
-  //   let parsedData = await data.json();
+      this.setState({
+        page: this.state.page + 1,
+        articles: parsedData.articles,
+      });
+    }
+  };
+  // here it showing no error  async when it is only on the arrow function.
+  handleOnPrevious = async () => {
+    console.log("After clicking ont the handleOnprevious");
 
-  //   this.setState({
-  //     page: this.state.page + 1,
-  //     articles: parsedData.articles,
-  //   });
-  // }
-  // async handleOnPrevious() {
-  //   console.log("After clicking ont the handleOnprevious");
-  //   console.log("After clicking on the HandleonNext");
-
-  //   let url = `https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=6d6abdf2aa094b79a25fc3a1f417d624&page=${
-  //     this.state.page - 1
-  //   }`;
-  //   let data = await fetch(url);
-  //   let parsedData = await data.json();
-  //   this.setState({
-  //     page: this.state.page - 1,
-  //     articles: parsedData.articles,
-  //   });
-  // }
+    let url = `https://newsapi.org/v2/top-headlines?country=in&category=business&page=${
+      this.state.page - 1
+    }&apiKey=6d6abdf2aa094b79a25fc3a1f417d624&pageSize=18`;
+    let data = await fetch(url);
+    let parsedData = await data.json();
+    this.setState({
+      page: this.state.page - 1,
+      articles: parsedData.articles,
+    });
+  };
   render() {
     return (
       <>
         <div className="container my-3">
-          <h2>NewsMonkey --Top Headlines</h2>
+          <h2 className="text-center">Todays --Top Headlines</h2>
           <div className="row">
             {this.state.articles.map((element) => {
               return (
@@ -346,12 +352,16 @@ export class News extends Component {
           <div className="container d-flex justify-content-between">
             <button
               type="button"
+              disabled={this.state.page <= 1}
               className="btn btn-dark"
               onClick={this.handleOnPrevious}
             >
               &larr; Previous
             </button>
             <button
+              disabled={
+                this.state.page >= Math.ceil(this.state.totalResults / 18)
+              }
               type="button"
               className="btn btn-dark"
               onClick={this.handleOnNext}
