@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import NewsItem from "./NewsItem";
+// import InfiniteScroll from "react-infinite-scroll-component";
+// import PropTypes from "prop-types";
 
 export class News extends Component {
   articles = [
@@ -281,19 +283,19 @@ export class News extends Component {
     },
   ];
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       articles: this.articles,
       loading: false,
       page: 1,
       totalResults: 0,
     };
+    document.title = `${this.props.category}-The Global News`;
   }
   async componentDidMount() {
     console.log("cdm");
-    let url =
-      " https://newsapi.org/v2/top-headlines?country=in&category=business&pageSize=18&apiKey=6d6abdf2aa094b79a25fc3a1f417d624";
+    let url = ` https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&pageSize=18&apiKey=6d6abdf2aa094b79a25fc3a1f417d624`;
     let data = await fetch(url);
     let parsedData = await data.json();
     this.setState({
@@ -304,7 +306,9 @@ export class News extends Component {
   handleOnNext = async () => {
     if (this.state.page + 1 > Math.ceil(this.state.totalResults / 18)) {
     } else {
-      let url = `https://newsapi.org/v2/top-headlines?country=in&category=business&page=${
+      let url = `https://newsapi.org/v2/top-headlines?country=${
+        this.props.country
+      }&category=${this.props.category}&page=${
         this.state.page + 1
       }&apiKey=6d6abdf2aa094b79a25fc3a1f417d624&pageSize=18`;
       let data = await fetch(url);
@@ -320,7 +324,9 @@ export class News extends Component {
   handleOnPrevious = async () => {
     console.log("After clicking ont the handleOnprevious");
 
-    let url = `https://newsapi.org/v2/top-headlines?country=in&category=business&page=${
+    let url = `https://newsapi.org/v2/top-headlines?country=${
+      this.props.country
+    }&category=${this.props.category}&page=${
       this.state.page - 1
     }&apiKey=6d6abdf2aa094b79a25fc3a1f417d624&pageSize=18`;
     let data = await fetch(url);
@@ -330,11 +336,25 @@ export class News extends Component {
       articles: parsedData.articles,
     });
   };
+  // fetchMoreData = async () => {
+  //   this.setState({ page: this.state.page + 1 });
+  //   let url = ` https://newsapi.org/v2/top-headlines?&page=${this.state.page}country=${this.props.country}&category=${this.props.category}&pageSize=18&apiKey=6d6abdf2aa094b79a25fc3a1f417d624`;
+  //   let data = await fetch(url);
+  //   let parsedData = await data.json();
+  //   this.setState({
+  //     articles: this.state.articles.concat(parsedData.articles),
+  //     totalResults: parsedData.totalResults,
+  //   });
+  // };
+
   render() {
     return (
       <>
         <div className="container my-3">
-          <h2 className="text-center">Todays --Top Headlines</h2>
+          <h2 className="text-center">
+            Todays --Top Headlines on {this.props.category}
+          </h2>
+
           <div className="row">
             {this.state.articles.map((element) => {
               return (
@@ -344,11 +364,15 @@ export class News extends Component {
                     description={element.description}
                     urlToImage={element.urlToImage}
                     url={element.url}
+                    author={element.author}
+                    date={element.publishedAt}
+                    source={element.source.name}
                   />
                 </div>
               );
             })}
           </div>
+
           <div className="container d-flex justify-content-between">
             <button
               type="button"
