@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "./components/Navbar";
 import News from "./components/News";
-
+import LoadingBar from "react-top-loading-bar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 export default class App extends Component {
   constructor(props) {
@@ -23,16 +23,13 @@ export default class App extends Component {
       document.body.style.backgroundColor = "white";
     }
   };
+
   render() {
     return (
       <>
         <Router>
           <Navbar mode={this.state.mode} togglemode={this.togglemode}></Navbar>
           <Routes>
-            {/* <Route
-              path="/general"
-              element={<News country="us" category="general" />}
-            /> */}
             <Route
               path="/"
               element={<News key="general" country="in" category="general" />}

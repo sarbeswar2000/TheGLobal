@@ -293,8 +293,8 @@ export class News extends Component {
     };
     document.title = `${this.props.category}-The Global News`;
   }
+
   async componentDidMount() {
-    console.log("cdm");
     let url = ` https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&pageSize=18&apiKey=6d6abdf2aa094b79a25fc3a1f417d624`;
     let data = await fetch(url);
     let parsedData = await data.json();
